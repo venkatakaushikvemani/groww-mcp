@@ -1,0 +1,34 @@
+# Ignore TypeScript source and configs
+src/
+LICENSE
+README.md
+*.ts
+*.tsx
+tsconfig.json
+tsup.config.*
+jest.config.*
+*.test.*
+*.spec.*
+
+# Ignore node_modules and logs
+node_modules/
+*.log
+
+# Ignore environment and misc files
+.env
+.env.*
+.DS_Store
+
+# Ignore build scripts and local configs
+.cursor/
+.vscode/
+.idea/
+npm-debug.log
+
+# Ignore test and coverage output
+coverage/
+test/
+__tests__/
+
+pnpm-lock.yaml
+package-lock.json

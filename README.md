@@ -7,7 +7,6 @@ This project provides an MCP (Multi-Channel Platform) server for interacting wit
 - Get live stock quotes and OHLC data
 - Place, modify, and cancel stock orders
 - Fully typed and validated with Zod schemas
-- Docker support for easy deployment
 
 ## Available Tools
 - **get-portfolio**: Get the current portfolio of the user
@@ -20,7 +19,7 @@ This project provides an MCP (Multi-Channel Platform) server for interacting wit
 - **get-order-status**: Get the status of an order
 
 ## Requirements
-- Node.js v18 or later (or Docker)
+- Node.js v18 or later
 - A valid Groww API key
 
 ## Setup (Local)
@@ -49,40 +48,23 @@ This project provides an MCP (Multi-Channel Platform) server for interacting wit
    pnpm start
    ```
 
-## Setup (Docker)
-
-1. **Build the Docker image:**
-   ```sh
-   docker build -t mcp-server .
-   ```
-2. **Run the container:**
-   ```sh
-   docker run -p 3000:3000 -e GROWW_API_KEY=your_groww_api_key_here mcp-server
-   ```
-   Adjust the port and environment variables as needed.
-
-## Environment Variables
-- `GROWW_API_KEY`: Your Groww API key (required)
-- `PORT`: Port for the server to listen on (default: 3000)
-
-## Sample mcp.json
-For local development with Cursor MCP, add a `.cursor/mcp.json` file in your project root:
+## Use with Cursor / Claude / Windsurf
+mcp.json
 
 ```json
 {
   "mcpServers": {
     "groww-mcp": {
       "command": "pnpm",
-      "args": ["--dir", "/path/to/your/groww-mcp", "start"],
+      "args": ["dlx", "groww-mcp"],
       "env": {
-        "GROWW_API_KEY": "your_groww_api_key_here"
+        "GROWW_API_KEY": "YOUR_GROWW_API_KEY"
       }
     }
   }
 }
-```
 
-Replace `/path/to/your/groww-mcp` and `your_groww_api_key_here` with your actual project path and API key.
+```
 
 ## Usage
 - The server exposes endpoints/tools for portfolio, quotes, and order management.
