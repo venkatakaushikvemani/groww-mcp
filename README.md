@@ -13,6 +13,7 @@ This project provides an MCP (Multi-Channel Platform) server for interacting wit
 - **get-live-quote**: Get live quote data for a specific stock
 - **get-last-traded-price**: Get the last traded price for one or more stocks
 - **get-ohlc**: Get OHLC (Open, High, Low, Close) data for stocks
+- **get-historical-candle**: Fetch historical candle data (Open, High, Low, Close, Volume) for a stock for a given time range and interval
 - **place-order**: Place a new stock order (buy/sell)
 - **modify-order**: Modify an existing stock order
 - **cancel-order**: Cancel an existing stock order
@@ -84,6 +85,10 @@ Here are some example prompts you can use to interact with the tools:
 
 - **Get OHLC data:**
   > Show me the OHLC data for TATAMOTORS
+
+- **Get historical candle data:**
+  > Show me the historical candle data for TATAMOTORS for the last 1 day
+  > Fetch 5-minute historical candles for TATAMOTORS from 2024-06-01 09:15:00 to 2024-06-01 15:30:00
 
 - **Place a buy order:**
   > Buy 10 shares of SADHNANIQ
