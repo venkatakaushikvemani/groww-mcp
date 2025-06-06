@@ -189,3 +189,33 @@ export const GetOrderStatusSchema = z.object({
     order_reference_id: z.string().optional()
   }).optional()
 });
+
+// Historical Candle Data (Groww)
+export const HistoricalCandleInputSchema = z.object({
+  exchange: z.string().describe("Stock exchange (e.g., NSE, BSE) as provided by the holdings API. Required."),
+  segment: z.string().describe("Segment of the instrument such as CASH, FNO etc. Required."),
+  trading_symbol: z.string().describe("Trading Symbol of the instrument as defined by the exchange. Required."),
+  start_time: z.string().describe("Time in yyyy-MM-dd HH:mm:ss or epoch milliseconds format from which data is required. Required."),
+  end_time: z.string().describe("Time in yyyy-MM-dd HH:mm:ss or epoch milliseconds format till which data is required. Required."),
+  interval_in_minutes: z.string().optional().describe("Interval in minutes for which data is required. Optional, defaults to 1.")
+});
+
+export const HistoricalCandleSchema = z.object({
+  status: z.string(),
+  payload: z.object({
+    candles: z.array(
+      z.tuple([
+        z.number().describe("Candle timestamp in epoch second"),
+        z.number().describe("Open price"),
+        z.number().describe("High price"),
+        z.number().describe("Low price"),
+        z.number().describe("Close price"),
+        z.number().describe("Volume")
+      ])
+    ),
+    start_time: z.string().describe("Start time in yyyy-MM-dd HH:mm:ss"),
+    end_time: z.string().describe("End time in yyyy-MM-dd HH:mm:ss"),
+    interval_in_minutes: z.number().describe("Interval in minutes")
+  }).optional(),
+  error: z.any().optional()
+});

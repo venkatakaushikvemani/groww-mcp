@@ -1,5 +1,5 @@
 import fetch from "node-fetch"; // If using Node < 18, otherwise use global fetch
-import { PortfolioSchema, LiveDataSchema, LtpSchema, PortfolioInputSchema, LiveDataInputSchema, LtpInputSchema, OhlcSchema, OhlcInputSchema, PlaceOrderInputSchema, PlaceOrderSchema, ModifyOrderInputSchema, ModifyOrderSchema, CancelOrderInputSchema, CancelOrderSchema, GetOrderStatusInputSchema, GetOrderStatusSchema, ValidityEnum, ExchangeEnum, SegmentEnum, ProductEnum, OrderTypeEnum, TransactionTypeEnum } from "../model/schema.js";
+import { PortfolioSchema, LiveDataSchema, LtpSchema, PortfolioInputSchema, LiveDataInputSchema, LtpInputSchema, OhlcSchema, OhlcInputSchema, PlaceOrderInputSchema, PlaceOrderSchema, ModifyOrderInputSchema, ModifyOrderSchema, CancelOrderInputSchema, CancelOrderSchema, GetOrderStatusInputSchema, GetOrderStatusSchema, ValidityEnum, ExchangeEnum, SegmentEnum, ProductEnum, OrderTypeEnum, TransactionTypeEnum, HistoricalCandleSchema, HistoricalCandleInputSchema } from "../model/schema.js";
 import { z } from "zod";
 
 export function registerGrowwTools(server: any, GROWW_API_KEY: string) {
@@ -350,6 +350,60 @@ export function registerGrowwTools(server: any, GROWW_API_KEY: string) {
       const parseResult = GetOrderStatusSchema.safeParse(data);
       if (!parseResult.success) {
         return { content: [{ type: "text", text: "Get Order Status response validation failed:\n" + JSON.stringify(parseResult.error.format(), null, 2) }] };
+      }
+      return { content: [{ type: "text", text: JSON.stringify(parseResult.data, null, 2) }] };
+    }
+  );
+
+  // Historical Candle Data tool
+  server.tool(
+    "get-historical-candle",
+    "Fetch historical candle data for an instrument using the Groww API.",
+    {
+      exchange: z.string().default("NSE").describe("Stock exchange (e.g., NSE, BSE) as provided by the holdings API. Optional, defaults to NSE."),
+      segment: z.string().default("CASH").describe("Segment of the instrument such as CASH, FNO etc. Optional, defaults to CASH."),
+      trading_symbol: z.string().describe("Trading Symbol of the instrument as defined by the exchange. Required."),
+      start_time: z.string().optional().describe("Time in yyyy-MM-dd HH:mm:ss or epoch milliseconds format from which data is required. Optional, defaults to 1 day ago."),
+      end_time: z.string().optional().describe("Time in yyyy-MM-dd HH:mm:ss or epoch milliseconds format till which data is required. Optional, defaults to current time."),
+      interval_in_minutes: z.string().optional().describe("Interval in minutes for which data is required. Optional, defaults to 1.")
+    },
+    async (input: z.infer<typeof HistoricalCandleInputSchema>) => {
+      const { exchange, segment, trading_symbol, interval_in_minutes } = input;
+      let start_time = input.start_time;
+      let end_time = input.end_time;
+
+      if(!start_time && !end_time) {
+        // Get the last 1 day data in epoch milliseconds
+        start_time = Math.floor(Date.now() - 24 * 60 * 60 * 1000).toString();
+        end_time = Date.now().toString();
+      }
+      const params = new URLSearchParams({
+        exchange,
+        segment,
+        trading_symbol,
+        start_time,
+        end_time
+      });
+      if (interval_in_minutes) params.append("interval_in_minutes", interval_in_minutes);
+      const url = `https://api.groww.in/v1/historical/candle/range?${params.toString()}`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${GROWW_API_KEY}`,
+          "Accept": "application/json"
+        }
+      });
+      const text = await response.text();
+      process.stderr.write("Groww Historical Candle API raw response: " + text);
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        return { content: [{ type: "text", text: "Failed to parse JSON from Groww Historical Candle API. Raw response: " + text }] };
+      }
+      const parseResult = HistoricalCandleSchema.safeParse(data);
+      if (!parseResult.success) {
+        return { content: [{ type: "text", text: "Historical Candle response validation failed:\n" + JSON.stringify(parseResult.error.format(), null, 2) }] };
       }
       return { content: [{ type: "text", text: JSON.stringify(parseResult.data, null, 2) }] };
     }
