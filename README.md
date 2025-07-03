@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/venkatakaushikvemani-groww-mcp-badge.png)](https://mseep.ai/app/venkatakaushikvemani-groww-mcp)
+
 # Groww MCP Server
 
 This project provides an MCP (Multi-Channel Platform) server for interacting with the Groww trading API. It allows you to fetch portfolio data, get live quotes, place/cancel/modify orders, and more, all via a unified API interface.
