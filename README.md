@@ -17,18 +17,29 @@ Fetches the user's current portfolio holdings, including trading symbol, quantit
 - **Sample Prompt:**
   > Show my portfolio
 
-### order
-Place, modify, cancel, or check the status of stock orders. Use this tool to manage your trades on Groww.
-- **Actions:**
-  - `place`: Place a new stock order (buy/sell)
-  - `modify`: Modify an existing stock order
-  - `cancel`: Cancel an existing stock order
-  - `status`: Get the status of an order
+### place_order
+Place a new stock order (buy/sell). Use this tool to execute trades on Groww.
 - **Sample Prompts:**
   > Place a buy order for 10 shares of TATAMOTORS
+  > Buy 10 shares of SADHNANIQ at market price
+
+### modify_order
+Modify an existing stock order. Use this tool to update quantity, price, or trigger price of a pending order.
+- **Sample Prompts:**
   > Modify my order for BPL to 20 shares
+  > Update the price of my order to 100 rupees
+
+### cancel_order
+Cancel an existing stock order. Use this tool to cancel a pending order on Groww.
+- **Sample Prompts:**
   > Cancel my latest order for BPL
+  > Cancel order with ID ABC123
+
+### order_status
+Get the status of a stock order. Use this tool to check the current status, filled quantity, and other details of an order.
+- **Sample Prompts:**
   > What is the status of my last order?
+  > Check the status of order ABC123
 
 ### market-data
 Fetch live quotes, last traded prices (LTP), OHLC, or historical candle data for stocks. Use this tool to get real-time or historical market data.
