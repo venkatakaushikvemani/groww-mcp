@@ -1,7 +1,5 @@
 # Ignore TypeScript source and configs
 src/
-LICENSE
-README.md
 *.ts
 *.tsx
 tsconfig.json
